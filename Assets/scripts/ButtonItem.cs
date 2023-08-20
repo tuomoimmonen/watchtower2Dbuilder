@@ -11,9 +11,12 @@ public class ButtonItem : MonoBehaviour
     Button button;
     [SerializeField] GameObject[] buildHereArrows;
 
+    BuildManager manager;
+
 
     void Start()
     {
+        manager = FindObjectOfType<BuildManager>();
         button = GetComponent<Button>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -22,7 +25,7 @@ public class ButtonItem : MonoBehaviour
     {
 
         //if not enough resources make button not interactable
-        if (resourceManager.buildingMaterial < buildDestroy.buildingMaterialCost || resourceManager.electricity < buildDestroy.electricityCost)
+        if ((resourceManager.buildingMaterial < buildDestroy.buildingMaterialCost) || manager.turretAmount == 6)
         {
             button.interactable = false;
         }
@@ -38,8 +41,5 @@ public class ButtonItem : MonoBehaviour
         float randomPitch = Random.Range(0.5f, 1.5f);
         audioSource.pitch = randomPitch;
         audioSource.Play();
-
-
-
     }
 }

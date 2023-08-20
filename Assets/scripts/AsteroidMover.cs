@@ -37,6 +37,9 @@ public class AsteroidMover : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if(collision.GetComponent<Planet>() == true)
+        {
+            Destroy(gameObject);
+        }
     }
 }

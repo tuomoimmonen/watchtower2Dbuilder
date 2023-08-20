@@ -13,6 +13,8 @@ public class BuildManager : MonoBehaviour
 
     [SerializeField] public GameObject upgradeButton;
 
+    public int turretAmount = 0;
+
     void Start()
     {
 
@@ -50,5 +52,15 @@ public class BuildManager : MonoBehaviour
     public void ShowUpgradeButton()
     {
         upgradeButton.SetActive(true);
+    }
+
+    public void IncreaseTurretAmount()
+    {
+        turretAmount++;
+    }
+
+    public void DecreaseTurretAmount()
+    {
+        turretAmount--;
     }
 }

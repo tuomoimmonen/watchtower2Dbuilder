@@ -11,8 +11,15 @@ public class BulletManager : MonoBehaviour
     ResourceManager manager;
 
     TurretManager turretManager;
+    AsteroidSpawner spawner;
+    AsteroidHealth asteroidHealth;
+
+    AudioSource shootSound;
     void Start()
     {
+        shootSound = GetComponent<AudioSource>();
+        //asteroidHealth = FindObjectOfType<AsteroidHealth>();
+        //spawner = FindObjectOfType<AsteroidSpawner>();
         manager = FindObjectOfType<ResourceManager>();
         bulletRb = GetComponent<Rigidbody2D>();
         turretManager = FindObjectOfType<TurretManager>();
@@ -25,6 +32,7 @@ public class BulletManager : MonoBehaviour
         float rotation = Mathf.Atan2(-direction.y, -direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rotation+90);
         */
+        PlayShootSound();
     }
 
     void Update()
@@ -38,8 +46,10 @@ public class BulletManager : MonoBehaviour
     {
         if(collision.tag == "Enemy")
         {
+            asteroidHealth = collision.GetComponent<AsteroidHealth>();
+            asteroidHealth.TakeDamage(1);
+            //spawner.enemiesAlive--;
             manager.buildingMaterial += 1;
-            Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }
@@ -56,5 +66,12 @@ public class BulletManager : MonoBehaviour
         float rotation = Mathf.Atan2(-direction.y, -direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rotation + 90);
         bulletRb.velocity = direction * movementSpeed;
+    }
+
+    private void PlayShootSound()
+    {
+        float randomPitch = Random.Range(0.5f, 1.5f);
+        shootSound.pitch = randomPitch;
+        shootSound.Play();
     }
 }

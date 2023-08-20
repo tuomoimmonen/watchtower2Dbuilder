@@ -18,8 +18,8 @@ public class TurretManager : MonoBehaviour
     [SerializeField] public float rotationSpeed = 40f;
 
     [SerializeField] int level = 0;
-    [SerializeField] int maxLevel = 10;
-    [SerializeField] float upgradeCost = 2;
+    [SerializeField] int maxLevel = 20;
+    [SerializeField] int upgradeCost = 2;
     [SerializeField] float upgradeIncrease = 0.9f;
 
     ResourceManager manager;
@@ -28,10 +28,13 @@ public class TurretManager : MonoBehaviour
     [SerializeField] GameObject upgradeButton;
 
     public bool canUpgrade = false;
+
+    AudioSource upgradeAudioSource;
     void Start()
     {
         manager = FindObjectOfType<ResourceManager>();
         buildManager = FindObjectOfType<BuildManager>();
+        upgradeAudioSource = GetComponent<AudioSource>();
         //target = FindObjectOfType<AsteroidMover>().transform;
     }
 
@@ -58,8 +61,16 @@ public class TurretManager : MonoBehaviour
         timeBetweenShots *= upgradeIncrease;
         rotationSpeed += upgradeIncrease;
         manager.buildingMaterial -= upgradeCost;
-        upgradeCost += upgradeIncrease;
+        upgradeCost += Mathf.RoundToInt(upgradeIncrease);
         upgradeButton.SetActive(false);
+    }
+
+    public void PlayPopSound()
+    {
+        //random pitch
+        float randomPitch = Random.Range(0.5f, 1.5f);
+        upgradeAudioSource.pitch = randomPitch;
+        upgradeAudioSource.Play();
     }
 
     private void Shoot()

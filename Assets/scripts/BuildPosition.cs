@@ -19,8 +19,9 @@ public class BuildPosition : MonoBehaviour
     {
         if(buildManager.buildingToPlace != null) //guard for error
         {
+            buildManager.IncreaseTurretAmount();
             Instantiate(buildManager.buildingToPlace, transform.position, transform.rotation);
-            buildManager.buildingToPlace = null; //not able to continue spawning same buildings
+            buildManager.buildingToPlace = null; //not able to continue spawning same buildings     
             Destroy(gameObject); //not to allow multiple buildings
         }
     }
