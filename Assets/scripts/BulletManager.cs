@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class BulletManager : MonoBehaviour
@@ -15,6 +14,8 @@ public class BulletManager : MonoBehaviour
     AsteroidHealth asteroidHealth;
 
     AudioSource shootSound;
+
+    [SerializeField] float bulletDamage = 1f;
     void Start()
     {
         shootSound = GetComponent<AudioSource>();
@@ -42,17 +43,35 @@ public class BulletManager : MonoBehaviour
         //transform.position += Vector3.up * movementSpeed * Time.deltaTime;
     }
 
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Enemy")
         {
             asteroidHealth = collision.GetComponent<AsteroidHealth>();
-            asteroidHealth.TakeDamage(1);
+            asteroidHealth.TakeDamage(bulletDamage);
+            MenuManager.instance.IncreaseScore();
             //spawner.enemiesAlive--;
             manager.buildingMaterial += 1;
             Destroy(gameObject);
         }
     }
+    
+
+    /*
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            asteroidHealth = collision.gameObject.GetComponent<AsteroidHealth>();
+            asteroidHealth.TakeDamage(bulletDamage);
+            MenuManager.instance.IncreaseScore();
+            //spawner.enemiesAlive--;
+            manager.buildingMaterial += 1;
+            Destroy(gameObject);
+        }
+    }
+    */
 
     public void SetTarget(Transform _target) //call from turret and set the turrets target
     {
@@ -71,6 +90,7 @@ public class BulletManager : MonoBehaviour
     private void PlayShootSound()
     {
         float randomPitch = Random.Range(0.5f, 1.5f);
+        shootSound.volume = 0.1f;
         shootSound.pitch = randomPitch;
         shootSound.Play();
     }

@@ -40,15 +40,22 @@ public class TurretManager : MonoBehaviour
 
     void Update()
     {
+        
+        UpgradeTurretUI();
+        startTimer -= Time.deltaTime;
+        Shoot();
+
+    }
+
+    private void UpgradeTurretUI()
+    {
         if (manager.buildingMaterial >= upgradeCost)
         {
             canUpgrade = true;
         }
         else { canUpgrade = false; }
 
-        startTimer -= Time.deltaTime;
-        Shoot();
-        if(canUpgrade == true && level < maxLevel)
+        if (canUpgrade == true && level < maxLevel)
         {
             upgradeButton.SetActive(true);
         }
@@ -104,6 +111,7 @@ public class TurretManager : MonoBehaviour
         }
     }
 
+    /*
     public void FindTarget()
     {
         RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 10f, (Vector2)transform.position, 0f, enemyMask);
@@ -113,5 +121,28 @@ public class TurretManager : MonoBehaviour
             target = hits[Random.Range(0, hits.Length)].transform;
         }
         //else { target = null; }
+    }
+    */
+
+    void FindTarget()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, turretRange);
+        float minDistance = Mathf.Infinity;
+        Transform closestTarget = null;
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Enemy"))
+            {
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestTarget = collider.transform;
+                }
+            }
+        }
+
+        target = closestTarget;
     }
 }

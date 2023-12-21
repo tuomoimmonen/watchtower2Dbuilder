@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ButtonItem : MonoBehaviour
 {
@@ -10,12 +11,17 @@ public class ButtonItem : MonoBehaviour
     AudioSource audioSource;
     Button button;
     [SerializeField] GameObject[] buildHereArrows;
+    [SerializeField] GameObject selectTurretText;
+    [SerializeField] GameObject buildHereText;
+
+    Animator animator;
 
     BuildManager manager;
 
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         manager = FindObjectOfType<BuildManager>();
         button = GetComponent<Button>();
         audioSource = GetComponent<AudioSource>();
@@ -28,10 +34,26 @@ public class ButtonItem : MonoBehaviour
         if ((resourceManager.buildingMaterial < buildDestroy.buildingMaterialCost) || manager.turretAmount == 6)
         {
             button.interactable = false;
+            animator.SetBool("isClickable", false);
+            selectTurretText.SetActive(false);
+            //buildHereText.SetActive(false);
+
         }
         else
         {
             button.interactable = true;
+            animator.SetBool("isClickable", true);
+            selectTurretText.SetActive(true);
+        }
+
+        if (manager.turretSelected == true)
+        {
+            selectTurretText.SetActive(false);
+            buildHereText.SetActive(true);
+        }
+        else
+        {
+            buildHereText.SetActive(false);
         }
     }
 

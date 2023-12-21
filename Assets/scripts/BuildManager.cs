@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +13,8 @@ public class BuildManager : MonoBehaviour
     [SerializeField] public GameObject upgradeButton;
 
     public int turretAmount = 0;
+
+    public bool turretSelected = false;
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class BuildManager : MonoBehaviour
             for (int i = 0; i < buildHereArrows.Length; i++)
             {
                 buildHereArrows[i].gameObject.SetActive(false);
+                turretSelected = false;
             }
         }
         else
@@ -45,6 +47,7 @@ public class BuildManager : MonoBehaviour
             for (int i = 0; i < buildHereArrows.Length; i++)
             {
                 buildHereArrows[i].gameObject.SetActive(true);
+                turretSelected = true;
             }
         }
     }

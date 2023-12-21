@@ -17,6 +17,8 @@ public class BuildDestroy : MonoBehaviour
 
     [SerializeField] GameObject destructionSound;
 
+    [SerializeField] GameObject destroyButton;
+
     void Start()
     {
         buildManager = FindObjectOfType<BuildManager>();
@@ -30,14 +32,24 @@ public class BuildDestroy : MonoBehaviour
         
     }
 
-    private void OnMouseDown() //when clicked destroy building
+    public void OnMouseDown() //when clicked destroy building
+    {
+        destroyButton.SetActive(true);
+    }
+
+    public void DestroyTurret()
     {
         //refund half of the buildings cost when deleting
         resourceManager.buildingMaterial += buildingMaterialCost / 2;
         buildManager.DecreaseTurretAmount();
-        Instantiate(destructionSound,transform.position, Quaternion.identity); //sound here
+        Instantiate(destructionSound, transform.position, Quaternion.identity); //sound here
         //instantiate new building position from prefab
         Instantiate(buildPosition, transform.position, transform.rotation);
         Destroy(gameObject); //destroy building
+    }
+
+    public void HideDestroyButtons()
+    {
+        destroyButton.SetActive(false);
     }
 }

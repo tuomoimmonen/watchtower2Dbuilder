@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Endpoint
+  - GameUI
+  - Planet
   layers:
   - Default
   - TransparentFX

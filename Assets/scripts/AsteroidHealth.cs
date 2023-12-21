@@ -6,14 +6,16 @@ using UnityEngine.UI;
 public class AsteroidHealth : MonoBehaviour
 {
     [SerializeField] Slider healthSlider;
-    public int maxHealth = 5;
-    private int currentHealth;
+    public float maxHealth = 5;
+    private float currentHealth;
 
     AsteroidSpawner spawner;
 
     AudioSource hitSound;
 
     ParticleSystem hitEffect;
+
+    [SerializeField] GameObject destroyEffect;
 
     void Start()
     {
@@ -30,11 +32,12 @@ public class AsteroidHealth : MonoBehaviour
         if(currentHealth <= 0)
         {
             spawner.enemiesAlive--;
+            Instantiate(destroyEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
@@ -52,6 +55,7 @@ public class AsteroidHealth : MonoBehaviour
     private void PlayHitSound()
     {
         float randomPitch = Random.Range(0.8f, 1.2f);
+        hitSound.volume = 0.1f;
         hitSound.pitch = randomPitch;
         hitSound.Play();
     }

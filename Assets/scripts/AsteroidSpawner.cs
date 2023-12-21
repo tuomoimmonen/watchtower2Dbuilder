@@ -8,9 +8,9 @@ public class AsteroidSpawner : MonoBehaviour
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] GameObject[] spawnObjects;
 
-    [SerializeField] float timeBetweenSpawns = 2f;
+    [SerializeField] public float timeBetweenSpawns = 2f;
     [SerializeField] float difficultyIncrease = 0.75f;
-    [SerializeField] float nextWave = 7f;
+
     float difficultyTimer;
     float timeToSpawn;
 
@@ -18,14 +18,18 @@ public class AsteroidSpawner : MonoBehaviour
     [SerializeField] int enemiesPerWave = 5;
     [SerializeField] float timeBetweenWaves = 5f;
     public int enemiesAlive; //control when the next wave starts
-    private int currentWave;
+    public int currentWave;
 
     [SerializeField] TMP_Text waveAnnouncerText;
     [SerializeField] float announcerDuration = 2f;
     [SerializeField] float timeBeforeWave = 2f;
     private bool waveInProgress = false;
+
+    Planet planet;
+
     void Start()
     {
+        planet = FindObjectOfType<Planet>();
         enemiesAlive = 0;
         currentWave = 0;
         StartCoroutine(SpawnWaves());
@@ -64,7 +68,7 @@ public class AsteroidSpawner : MonoBehaviour
     {
         //StartCoroutine(WaveAnnouncer());
         yield return new WaitForSeconds(timeBeforeWave);
-        while(currentWave < maxWave)
+        while(planet.isAlive == true)
         {
             if(enemiesAlive == 0 && !waveInProgress)
             {
@@ -83,8 +87,13 @@ public class AsteroidSpawner : MonoBehaviour
         waveAnnouncerText.text = "Wave " + (currentWave + 1) + " starting!";
         yield return new WaitForSeconds(announcerDuration);
         waveAnnouncerText.gameObject.SetActive(false);
+        if(currentWave > 2)
+        {
+            enemiesPerWave++;
+        }
         StartCoroutine(SpawnEnemy());
         currentWave++;
+        maxWave++;
         yield return new WaitForSeconds(timeBetweenWaves);
     }
     private IEnumerator SpawnEnemy()
